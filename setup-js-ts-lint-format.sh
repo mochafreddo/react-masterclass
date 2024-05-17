@@ -99,7 +99,7 @@ cat <<EOL >.stylelintrc.json
     "indentation": 2,
     "max-empty-lines": 1,
     "string-quotes": "single",
-    "unit-whitelist": ["em", "rem", "%", "s"]
+    "unit-allowed-list": ["em", "rem", "%", "s"]
   }
 }
 EOL
