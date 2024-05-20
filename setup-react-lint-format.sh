@@ -10,26 +10,29 @@ npm install -g npm-check-updates
 npx husky install
 
 # pre-commit 훅 추가 (커밋 전에 lint-staged 실행)
-npx husky add .husky/pre-commit "npx lint-staged"
+cat <<EOL >.husky/pre-commit
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx lint-staged
+EOL
+chmod +x .husky/pre-commit
+
 # commit-msg 훅 추가 (커밋 메시지 검사)
-npx husky add .husky/commit-msg 'npx --no-install commitlint --edit "$1"'
+cat <<EOL >.husky/commit-msg
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx --no-install commitlint --edit "\$1"
+EOL
+chmod +x .husky/commit-msg
 
 # ESLint 설정 파일 생성
 cat <<EOL >.eslintrc.json
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "react-app",
-    "react-app/jest",
-    "prettier",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "plugins": [
-    "prettier",
-    "import",
-    "simple-import-sort",
-    "@typescript-eslint"
-  ],
+  "extends": ["react-app", "react-app/jest", "prettier"],
+  "plugins": ["prettier", "import", "simple-import-sort"],
   "rules": {
     "prettier/prettier": "error",
     "import/order": [
@@ -133,5 +136,54 @@ cat <<EOL >.ncurc.json
 }
 EOL
 
-# 프로젝트 초기화 완료 메시지 출력
-echo "프로젝트 초기화가 완료되었습니다. 이제 코딩을 시작하세요!"
+# 설정 파일들이 제대로 생성되었는지 확인
+if [ -f ".eslintrc.json" ] && [ -f ".prettierrc" ] && [ -f ".stylelintrc.json" ] && [ -f ".lintstagedrc" ] && [ -f "commitlint.config.js" ] && [ -f ".ncurc.json" ]; then
+  echo "설정 파일들이 성공적으로 생성되었습니다."
+else
+  echo "설정 파일 생성에 실패했습니다."
+  exit 1
+fi
+
+# ESLint 테스트
+echo "console.log('test');" >test.js
+npx eslint test.js
+if [ $? -eq 0 ]; then
+  echo "ESLint가 정상적으로 작동합니다."
+else
+  echo "ESLint 테스트에 실패했습니다."
+  exit 1
+fi
+rm test.js
+
+# Prettier 테스트
+echo "const x = { y: 1 };" >test.js
+npx prettier --check test.js
+if [ $? -eq 0 ]; then
+  echo "Prettier가 정상적으로 작동합니다."
+else
+  echo "Prettier 테스트에 실패했습니다."
+  exit 1
+fi
+rm test.js
+
+# Stylelint 테스트
+echo "a { color: #fff; }" >test.css
+npx stylelint test.css
+if [ $? -eq 0 ]; then
+  echo "Stylelint가 정상적으로 작동합니다."
+else
+  echo "Stylelint 테스트에 실패했습니다."
+  exit 1
+fi
+rm test.css
+
+# Commitlint 테스트
+echo "test: commit message" | npx commitlint
+if [ $? -eq 0 ]; then
+  echo "Commitlint가 정상적으로 작동합니다."
+else
+  echo "Commitlint 테스트에 실패했습니다."
+  exit 1
+fi
+
+echo "모든 설정이 정상적으로 작동합니다."

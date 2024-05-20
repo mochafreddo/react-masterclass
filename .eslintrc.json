@@ -1,12 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "react-app",
-    "react-app/jest",
-    "prettier",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "plugins": ["prettier", "import", "simple-import-sort", "@typescript-eslint"],
+  "extends": ["react-app", "react-app/jest", "prettier"],
+  "plugins": ["prettier", "import", "simple-import-sort"],
   "rules": {
     "prettier/prettier": "error",
     "import/order": [
