@@ -6,13 +6,7 @@
     "prettier",
     "plugin:@typescript-eslint/recommended"
   ],
-  "plugins": [
-    "prettier",
-    "import",
-    "simple-import-sort",
-    "@typescript-eslint",
-    "jest"
-  ],
+  "plugins": ["prettier", "import", "simple-import-sort", "@typescript-eslint"],
   "rules": {
     "prettier/prettier": "error",
     "import/order": [

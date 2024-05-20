@@ -28,8 +28,7 @@ cat <<EOL >.eslintrc.json
     "prettier",
     "import",
     "simple-import-sort",
-    "@typescript-eslint",
-    "jest"
+    "@typescript-eslint"
   ],
   "rules": {
     "prettier/prettier": "error",
