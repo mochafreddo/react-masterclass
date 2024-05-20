@@ -7,7 +7,7 @@ npm install --save-dev eslint prettier eslint-config-prettier eslint-plugin-pret
 npm install -g npm-check-updates
 
 # Husky 초기화
-npx husky install
+npx husky init
 
 # pre-commit 훅 추가 (커밋 전에 lint-staged 실행)
 cat <<EOL >.husky/pre-commit
