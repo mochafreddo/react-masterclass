@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, Switch, useLocation, useParams } from 'react-router';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Chart from './Chart';
@@ -50,9 +50,6 @@ const Description = styled.p`
   margin: 20px 0px;
 `;
 
-interface RouteParams {
-  coinId: string;
-}
 interface RouteState {
   name: string;
 }
@@ -117,8 +114,10 @@ function Coin() {
   const [loading, setLoading] = useState(true);
   const [priceInfo, setPriceInfo] = useState<PriceData>();
 
-  const { coinId } = useParams<RouteParams>();
-  const { state } = useLocation<RouteState>();
+  const { coinId } = useParams<{ coinId: string }>();
+
+  const location = useLocation();
+  const state = location.state as RouteState;
 
   useEffect(() => {
     (async () => {
@@ -171,14 +170,10 @@ function Coin() {
               <span>{priceInfo?.max_supply}</span>
             </OverviewItem>
           </Overview>
-          <Switch>
-            <Route path={`/${coinId}/price`}>
-              <Price />
-            </Route>
-            <Route path={`/${coinId}/chart`}>
-              <Chart />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="price" element={<Price />} />
+            <Route path="chart" element={<Chart />} />
+          </Routes>
         </>
       )}
     </Container>
