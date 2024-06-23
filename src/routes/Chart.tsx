@@ -29,34 +29,76 @@ function Chart() {
         'Loading chart...'
       ) : (
         <ApexChart
-          type="line"
+          type="candlestick"
           series={[
-            { name: 'Price', data: data?.map((price) => price.close) || [] },
+            {
+              name: 'Price',
+              data:
+                data?.map((price) => ({
+                  x: new Date(price.time_close),
+                  y: [price.open, price.high, price.low, price.close],
+                })) || [],
+            },
           ]}
           options={{
             theme: { mode: 'dark' },
             chart: {
               height: 300,
-              width: 500,
+              width: '100%',
               toolbar: { show: false },
               background: 'transparent',
             },
-            grid: { show: false },
-            stroke: { curve: 'smooth', width: 4 },
-            yaxis: { show: false },
+            grid: {
+              show: true,
+              borderColor: '#444',
+              strokeDashArray: 5,
+            },
             xaxis: {
-              axisBorder: { show: false },
-              axisTicks: { show: false },
-              labels: { show: false },
               type: 'datetime',
-              categories: data?.map((price) => price.time_close),
+              labels: {
+                style: {
+                  colors: '#888',
+                },
+              },
             },
-            fill: {
-              type: 'gradient',
-              gradient: { gradientToColors: ['#0be881'], stops: [0, 100] },
+            yaxis: {
+              show: true,
+              labels: {
+                style: {
+                  colors: '#888',
+                },
+                formatter: (value) => `$${value.toFixed(2)}`,
+              },
             },
-            colors: ['#0fbcf9'],
-            tooltip: { y: { formatter: (value) => `$${value.toFixed(2)}` } },
+            plotOptions: {
+              candlestick: {
+                colors: {
+                  upward: '#26a69a',
+                  downward: '#ef5350',
+                },
+                wick: {
+                  useFillColor: true,
+                },
+              },
+            },
+            tooltip: {
+              enabled: true,
+              theme: 'dark',
+              x: {
+                format: 'dd MMM yyyy HH:mm',
+              },
+              y: {
+                formatter: (value) => `$${value.toFixed(2)}`,
+              },
+            },
+            title: {
+              text: `Price History of ${coinId}`,
+              align: 'left',
+              style: {
+                fontSize: '18px',
+                color: '#fff',
+              },
+            },
           }}
         />
       )}
