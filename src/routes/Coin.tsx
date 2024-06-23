@@ -1,6 +1,12 @@
 import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
-import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -76,6 +82,22 @@ const Tab = styled('span').withConfig({
   }
 `;
 
+const Button = styled.button`
+  background-color: ${(props) => props.theme.accentColor};
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: ${(props) => props.theme.bgColor};
+  }
+`;
+
 interface RouteState {
   name: string;
 }
@@ -139,6 +161,7 @@ function Coin() {
   const { coinId } = useParams<{ coinId: string }>();
   const location = useLocation();
   const state = location.state as RouteState;
+  const navigate = useNavigate();
 
   const chartMatch = useMatch('/:coinId/chart');
   const priceMatch = useMatch('/:coinId/price');
@@ -169,6 +192,7 @@ function Coin() {
           {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
         </Title>
       </Header>
+      <Button onClick={() => navigate('/')}>Go Back</Button>
       {loading ? (
         <Loader>Loading...</Loader>
       ) : (
