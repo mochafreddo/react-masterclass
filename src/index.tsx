@@ -2,12 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { ThemeProvider } from 'styled-components';
 
 import App from './App';
-import GlobalStyle from './GlobalStyles';
-import { theme } from './theme';
 
+// Initialize React Query Client
 const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(
@@ -16,11 +14,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </ThemeProvider>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>,
 );
