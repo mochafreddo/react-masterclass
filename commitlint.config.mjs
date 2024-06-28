@@ -1,7 +1,7 @@
 const config = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'header-max-length': [2, 'always', 50],
+    'header-max-length': [1, 'always', 50],
     'type-enum': [
       2,
       'always',
@@ -20,11 +20,11 @@ const config = {
       ],
     ],
     'subject-case': [
-      2,
+      1,
       'never',
       ['sentence-case', 'start-case', 'pascal-case', 'upper-case'],
     ],
-    'subject-full-stop': [2, 'never', '.'],
+    'subject-full-stop': [1, 'never', '.'],
   },
 };
 

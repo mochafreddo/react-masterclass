@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
@@ -54,6 +55,19 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
+const FallbackImg = styled.div`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+`;
+
 interface ICoin {
   id: string;
   name: string;
@@ -82,10 +96,7 @@ function Coins() {
           {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={{ name: coin.name }}>
-                <Img
-                  // src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
-                  src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}
-                />
+                <CoinImage symbol={coin.symbol} />
                 {coin.name} &rarr;
               </Link>
             </Coin>
@@ -95,5 +106,23 @@ function Coins() {
     </Container>
   );
 }
+
+const CoinImage: React.FC<{ symbol: string }> = ({ symbol }) => {
+  const [imageError, setImageError] = useState(false);
+
+  if (!symbol) {
+    return null;
+  }
+
+  return imageError ? (
+    <FallbackImg>{symbol.charAt(0)}</FallbackImg>
+  ) : (
+    <Img
+      src={`https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png`}
+      onError={() => setImageError(true)}
+      alt={`${symbol} icon`}
+    />
+  );
+};
 
 export default Coins;
