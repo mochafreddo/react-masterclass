@@ -1,25 +1,9 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { HelmetProvider } from 'react-helmet-async';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { RecoilRoot } from 'recoil';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
 
-import App from './App';
-
-// Initialize React Query Client
-const queryClient = new QueryClient();
-
-const root = createRoot(document.getElementById('root') as HTMLElement);
-root.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RecoilRoot>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </HelmetProvider>
-    </RecoilRoot>
+    <App />
   </React.StrictMode>,
-);
+)

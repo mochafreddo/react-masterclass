@@ -1,21 +1,13 @@
-import { RouterProvider } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { ThemeProvider } from 'styled-components';
-
-import { isDarkAtom } from './atoms';
-import GlobalStyle from './GlobalStyles';
-import router from './Router';
-import { darkTheme, lightTheme } from './theme';
+import GlobalStyle from './GlobalStyle'
+import ToDoList from './ToDoList'
 
 function App() {
-  const isDark = useRecoilValue(isDarkAtom);
-
   return (
-    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+    <>
       <GlobalStyle />
-      <RouterProvider router={router} />
-    </ThemeProvider>
-  );
+      <ToDoList />
+    </>
+  )
 }
 
-export default App;
+export default App

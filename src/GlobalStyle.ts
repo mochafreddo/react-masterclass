@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
 html, body, div, span, applet, object, iframe,
@@ -21,6 +21,7 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
@@ -42,20 +43,6 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
-}
-* {
-  box-sizing: border-box;
-}
-body {
-  font-family: "Noto Sans KR", "Roboto", sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
-  line-height: 1.2;
-}
-a {
-  text-decoration: none;
-  color:inherit;
-}
-`;
+}`
 
-export default GlobalStyle;
+export default GlobalStyle
