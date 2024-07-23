@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
-import { toDoState } from '../atoms'
+import { Categories, categoryState, toDoSelector, toDoState } from '../atoms'
 import CreateToDo from './CreateToDo'
+import ProgressBar from './ProgressBar'
 import ToDo from './ToDo'
 
 const Container = styled.div`
@@ -12,69 +12,44 @@ const Container = styled.div`
 `
 
 const Title = styled.h1`
-  font-size: 24px;
   color: ${(props) => props.theme.textColor};
+  font-size: 24px;
   margin-bottom: 20px;
 `
 
-const FilterContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
   margin-bottom: 20px;
-`
-
-const FilterButton = styled.button<{ isActive: boolean }>`
-  background-color: ${(props) => (props.isActive ? props.theme.accentColor : 'transparent')};
-  color: ${(props) => (props.isActive ? props.theme.bgColor : props.theme.textColor)};
+  background-color: ${(props) => props.theme.cardBgColor};
+  color: ${(props) => props.theme.textColor};
   border: 1px solid ${(props) => props.theme.accentColor};
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${(props) => props.theme.accentColor};
-    color: ${(props) => props.theme.bgColor};
-  }
-`
-
-const TodoList = styled.ul`
-  list-style-type: none;
-  padding: 0;
+  border-radius: 5px;
 `
 
 function ToDoList() {
-  const toDos = useRecoilValue(toDoState)
-  const [filter, setFilter] = useState<'ALL' | 'TO_DO' | 'DOING' | 'DONE'>('ALL')
+  const [category, setCategory] = useRecoilState(categoryState)
+  const toDos = useRecoilValue(toDoSelector)
+  const allToDos = useRecoilValue(toDoState)
 
-  const filteredToDos = toDos.filter((toDo) => {
-    if (filter === 'ALL') return true
-    return toDo.category === filter
-  })
+  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
+    setCategory(event.currentTarget.value as Categories)
+  }
+
+  const totalToDos = allToDos.length
+  const completedToDos = allToDos.filter((toDo) => toDo.category === Categories.DONE).length
 
   return (
     <Container>
-      <Title>To Dos</Title>
-      <FilterContainer>
-        <FilterButton isActive={filter === 'ALL'} onClick={() => setFilter('ALL')}>
-          All
-        </FilterButton>
-        <FilterButton isActive={filter === 'TO_DO'} onClick={() => setFilter('TO_DO')}>
-          To Do
-        </FilterButton>
-        <FilterButton isActive={filter === 'DOING'} onClick={() => setFilter('DOING')}>
-          Doing
-        </FilterButton>
-        <FilterButton isActive={filter === 'DONE'} onClick={() => setFilter('DONE')}>
-          Done
-        </FilterButton>
-      </FilterContainer>
+      <Title>My Todo List</Title>
+      <ProgressBar total={totalToDos} completed={completedToDos} />
+      <Select value={category} onInput={onInput}>
+        <option value={Categories.TO_DO}>To Do</option>
+        <option value={Categories.DOING}>Doing</option>
+        <option value={Categories.DONE}>Done</option>
+      </Select>
       <CreateToDo />
-      <TodoList>
-        {filteredToDos.map((toDo) => (
-          <ToDo key={toDo.id} {...toDo} />
-        ))}
-      </TodoList>
+      {toDos?.map((toDo) => <ToDo key={toDo.id} {...toDo} />)}
     </Container>
   )
 }

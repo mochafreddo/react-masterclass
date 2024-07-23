@@ -27,8 +27,12 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	line-height: 1;
-}
+    line-height: 1.5;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    background-color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
+  }
 ol, ul {
 	list-style: none;
 }
