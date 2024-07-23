@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import { RecoilRoot } from 'recoil'
 import styled, { ThemeProvider } from 'styled-components'
@@ -18,7 +18,14 @@ const ThemeToggle = styled.button`
 `
 
 function App() {
-  const [isDarkTheme, setIsDarkTheme] = useState(true)
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    const saved = localStorage.getItem('isDarkTheme')
+    return saved !== null ? JSON.parse(saved) : true
+  })
+
+  useEffect(() => {
+    localStorage.setItem('isDarkTheme', JSON.stringify(isDarkTheme))
+  }, [isDarkTheme])
 
   const toggleTheme = () => setIsDarkTheme(!isDarkTheme)
 
