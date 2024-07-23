@@ -28,11 +28,11 @@ const ButtonContainer = styled.div`
   gap: 5px;
 `
 
-const Button = styled.button<{ category: Categories }>`
+const Button = styled.button<{ $category: Categories }>`
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: ${(props) => props.theme.categoryColors[props.category]};
+  background-color: ${(props) => props.theme.categoryColors[props.$category]};
   color: ${(props) => (props.theme.isDark ? props.theme.bgColor : props.theme.textColor)};
   border: none;
   padding: 5px 10px;
@@ -72,7 +72,7 @@ function ToDo({ text, category, id }: IToDo) {
       <ButtonContainer>
         {category !== Categories.DOING && (
           <Button
-            category={Categories.DOING}
+            $category={Categories.DOING}
             name={Categories.DOING}
             onClick={onClick}
             aria-label="Mark as Doing"
@@ -82,7 +82,7 @@ function ToDo({ text, category, id }: IToDo) {
         )}
         {category !== Categories.TO_DO && (
           <Button
-            category={Categories.TO_DO}
+            $category={Categories.TO_DO}
             name={Categories.TO_DO}
             onClick={onClick}
             aria-label="Mark as To Do"
@@ -92,7 +92,7 @@ function ToDo({ text, category, id }: IToDo) {
         )}
         {category !== Categories.DONE && (
           <Button
-            category={Categories.DONE}
+            $category={Categories.DONE}
             name={Categories.DONE}
             onClick={onClick}
             aria-label="Mark as Done"
@@ -101,7 +101,7 @@ function ToDo({ text, category, id }: IToDo) {
           </Button>
         )}
         <Button
-          category={category}
+          $category={category}
           onClick={onDelete}
           aria-label="Delete Todo"
           style={{ backgroundColor: 'red' }}
