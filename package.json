@@ -8,52 +8,64 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"**/*.{css,scss}\"",
     "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "test:coverage": "vitest run --coverage",
     "prepare": "husky install",
-    "husky:lint": "husky add .husky/pre-commit 'npx lint-staged'"
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
+    "@eslint/js": "^9.12.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hook-form": "^7.53.0",
-    "react-icons": "^5.3.0",
     "recoil": "^0.7.7",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
+    "@types/styled-components": "^5.1.34",
     "@typescript-eslint/eslint-plugin": "^8.9.0",
     "@typescript-eslint/parser": "^8.9.0",
+    "@vitejs/plugin-react": "^4.3.2",
     "@vitejs/plugin-react-swc": "^3.7.1",
     "eslint": "^9.12.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.12",
+    "globals": "^15.11.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
-    "typescript": "^5.6.3",
+    "stylelint": "^16.10.0",
+    "stylelint-config-standard": "^36.0.1",
+    "typescript": ">=4.7.4 <5.6.0",
     "vite": "^5.4.9",
     "vitest": "^2.1.3"
   },
   "lint-staged": {
-    "*.{ts,tsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "npm run typecheck"
+      "vitest related --run"
     ],
-    "*.{json,md}": "prettier --write"
+    "*.{json,md,yml,yaml}": "prettier --write",
+    "*.{css,scss}": [
+      "prettier --write",
+      "stylelint --fix"
+    ]
   }
 }

@@ -30,4 +30,4 @@ export default {
     'type-empty': [0, 'never'],
     'subject-empty': [0, 'never'],
   },
-}
+};

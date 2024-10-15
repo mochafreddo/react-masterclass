@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -9,12 +8,12 @@
     "strict": true,
     "target": "ES2020",
     "lib": ["ES2020"],
-    "types": [],
+    "types": ["node"],
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["vite.config.ts", "commitlint.config.js"],
-  "exclude": ["src", "node_modules"]
+  "include": ["vite.config.ts", "commitlint.config.js", "eslint.config.js"]
 }

@@ -1,12 +1,17 @@
 {
-  "semi": false,
+  "semi": true,
   "singleQuote": true,
+  "jsxSingleQuote": false,
+  "trailingComma": "es5",
   "printWidth": 100,
   "tabWidth": 2,
-  "trailingComma": "es5",
+  "useTabs": false,
   "bracketSpacing": true,
+  "bracketSameLine": false,
   "arrowParens": "always",
   "endOfLine": "lf",
+  "embeddedLanguageFormatting": "auto",
+  "singleAttributePerLine": false,
   "overrides": [
     {
       "files": ["*.json", "*.json5"],
@@ -24,7 +29,23 @@
     {
       "files": ["*.md"],
       "options": {
-        "proseWrap": "always"
+        "proseWrap": "always",
+        "printWidth": 80
+      }
+    },
+    {
+      "files": ["*.ts", "*.tsx"],
+      "options": {
+        "parser": "typescript",
+        "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+        "importOrderSeparation": true,
+        "importOrderSortSpecifiers": true
+      }
+    },
+    {
+      "files": ["*.css", "*.scss"],
+      "options": {
+        "singleQuote": false
       }
     }
   ]
