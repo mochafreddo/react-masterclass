@@ -30,9 +30,6 @@ export default defineConfig({
       localsConvention: 'camelCaseOnly',
     },
   },
-  esbuild: {
-    jsxInject: `import React from 'react'`,
-  },
   optimizeDeps: {
     include: ['react', 'react-dom'],
   },
