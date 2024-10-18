@@ -27,6 +27,7 @@ export default {
     'subject-full-stop': [0, 'never'],
     'subject-case': [0, 'never'],
     'header-max-length': [0, 'always', 100],
+    'body-max-line-length': [1, 'always', 200],
     'type-empty': [0, 'never'],
     'subject-empty': [0, 'never'],
   },
