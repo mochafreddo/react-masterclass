@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import { toDoState } from './atoms';
 import Board from './Components/Board';
+import CreateBoardForm from './Components/CreateBoardForm';
 import TrashCan from './Components/TrashCan';
 
 import type { DropResult } from 'react-beautiful-dnd';
@@ -49,6 +50,9 @@ const Boards = styled.div`
  * - Reordering todo items within a board
  * - Deleting todo items by dragging them to the trash can
  *
+ * It also includes a form for creating new boards and a trash can component
+ * for deleting items.
+ *
  * @component
  * @example
  * <App />
@@ -59,6 +63,11 @@ function App() {
   /**
    * Handles the end of a drag operation.
    * Updates the todo state based on the drag result.
+   *
+   * @param {DropResult} info - The result of the drag operation
+   * @param {DraggableLocation} info.source - The source of the dragged item
+   * @param {DraggableLocation} info.destination - The destination of the dragged item
+   * @param {string} info.type - The type of the dragged item ('board' or 'todo')
    */
   const onDragEnd = (info: DropResult): void => {
     const { destination, source, type } = info;
@@ -120,6 +129,7 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
+        <CreateBoardForm />
         <Droppable droppableId="boards" direction="horizontal" type="board">
           {(provided) => (
             <Boards ref={provided.innerRef} {...provided.droppableProps}>
