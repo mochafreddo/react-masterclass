@@ -5,15 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "target": "ES2020",
-    "lib": ["ES2020"],
-    "types": ["node"],
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "emitDeclarationOnly": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": true
   },
-  "include": ["vite.config.ts", "commitlint.config.js", "eslint.config.js"]
+  "include": ["vite.config.ts"]
 }

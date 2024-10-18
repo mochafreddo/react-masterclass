@@ -23,13 +23,7 @@
     },
     "types": ["vite/client"]
   },
-  "include": [
-    "src",
-    "*.config.js",
-    "*.config.ts",
-    "vite.config.ts",
-    "commitlint.config.js",
-    "eslint.config.js"
-  ],
+  "include": ["src", "*.config.js", "commitlint.config.js", "eslint.config.js"],
+  "exclude": ["vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
