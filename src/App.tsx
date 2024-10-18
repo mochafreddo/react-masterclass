@@ -4,12 +4,14 @@ import styled from 'styled-components';
 
 import { toDoState } from './atoms';
 import Board from './Components/Board';
+import TrashCan from './Components/TrashCan';
 
 import type { DropResult } from 'react-beautiful-dnd';
 
 /**
  * Styled component for the main wrapper of the application.
- * It centers the content both horizontally and vertically.
+ * It centers the content both horizontally and vertically,
+ * and takes up the full viewport width and height.
  */
 const Wrapper = styled.div`
   display: flex;
@@ -22,7 +24,8 @@ const Wrapper = styled.div`
 
 /**
  * Styled component for the container of all boards.
- * It arranges the boards horizontally with some spacing.
+ * It arranges the boards horizontally with equal spacing,
+ * and aligns them to the top of the container.
  */
 const Boards = styled.div`
   display: flex;
@@ -36,8 +39,11 @@ const Boards = styled.div`
  * Main application component for a drag-and-drop todo list.
  *
  * This component uses react-beautiful-dnd for drag and drop functionality,
- * and Recoil for state management. It renders a list of boards, each containing
- * todo items that can be dragged between boards.
+ * and Recoil for state management. It renders multiple boards, each containing
+ * todo items that can be dragged between boards or to a trash can for deletion.
+ *
+ * The component handles the logic for updating the todo state when items are
+ * moved between boards or deleted.
  */
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -46,24 +52,36 @@ function App() {
    * Handles the end of a drag operation.
    * Updates the todo state based on the drag result.
    *
-   * @param {DropResult} info - The result of the drag operation
+   * @param {DropResult} info - The result of the drag operation, containing source and destination information
    */
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
     if (!destination) return;
 
-    setToDos((allBoards) => {
-      const sourceBoard = [...allBoards[source.droppableId]];
-      const taskObj = sourceBoard[source.index];
-
-      if (destination.droppableId === source.droppableId) {
+    if (destination.droppableId === 'trash') {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
         sourceBoard.splice(source.index, 1);
-        sourceBoard.splice(destination.index, 0, taskObj);
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
         };
-      } else {
+      });
+    } else if (destination.droppableId === source.droppableId) {
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination.index, 0, taskObj);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    } else {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination.droppableId]];
         sourceBoard.splice(source.index, 1);
         destinationBoard.splice(destination.index, 0, taskObj);
@@ -72,8 +90,8 @@ function App() {
           [source.droppableId]: sourceBoard,
           [destination.droppableId]: destinationBoard,
         };
-      }
-    });
+      });
+    }
   };
 
   return (
@@ -84,6 +102,7 @@ function App() {
             <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
           ))}
         </Boards>
+        <TrashCan />
       </Wrapper>
     </DragDropContext>
   );
