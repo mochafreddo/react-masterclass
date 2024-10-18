@@ -1,4 +1,4 @@
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 
@@ -40,10 +40,18 @@ const Boards = styled.div`
  *
  * This component uses react-beautiful-dnd for drag and drop functionality,
  * and Recoil for state management. It renders multiple boards, each containing
- * todo items that can be dragged between boards or to a trash can for deletion.
+ * todo items that can be dragged between boards, reordered within boards,
+ * or moved to a trash can for deletion.
  *
- * The component handles the logic for updating the todo state when items are
- * moved between boards or deleted.
+ * The component handles the logic for:
+ * - Reordering boards
+ * - Moving todo items between boards
+ * - Reordering todo items within a board
+ * - Deleting todo items by dragging them to the trash can
+ *
+ * @component
+ * @example
+ * <App />
  */
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -51,40 +59,53 @@ function App() {
   /**
    * Handles the end of a drag operation.
    * Updates the todo state based on the drag result.
-   *
-   * @param {DropResult} info - The result of the drag operation, containing source and destination information
    */
-  const onDragEnd = (info: DropResult) => {
-    const { destination, source } = info;
+  const onDragEnd = (info: DropResult): void => {
+    const { destination, source, type } = info;
     if (!destination) return;
 
-    if (destination.droppableId === 'trash') {
+    if (type === 'board') {
+      // Handle board reordering
+      // Reorders the boards based on the drag and drop operation
       setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        sourceBoard.splice(source.index, 1);
+        const entries = Object.entries(allBoards);
+        const [reorderedBoard] = entries.splice(source.index, 1);
+        entries.splice(destination.index, 0, reorderedBoard);
+        return Object.fromEntries(entries);
+      });
+    } else if (destination.droppableId === 'trash') {
+      // Handle trashing a todo
+      // Removes the todo item from its source board when dropped in the trash
+      setToDos((allBoards) => {
+        const sourceBoard = { ...allBoards[source.droppableId] };
+        sourceBoard.todos.splice(source.index, 1);
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
         };
       });
     } else if (destination.droppableId === source.droppableId) {
+      // Handle reordering within the same board
+      // Reorders todo items within a single board
       setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        const taskObj = boardCopy[source.index];
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination.index, 0, taskObj);
+        const boardCopy = { ...allBoards[source.droppableId] };
+        const taskObj = boardCopy.todos[source.index];
+        boardCopy.todos.splice(source.index, 1);
+        boardCopy.todos.splice(destination.index, 0, taskObj);
         return {
           ...allBoards,
           [source.droppableId]: boardCopy,
         };
       });
     } else {
+      // Handle moving between boards
+      // Moves a todo item from one board to another
       setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const taskObj = sourceBoard[source.index];
-        const destinationBoard = [...allBoards[destination.droppableId]];
-        sourceBoard.splice(source.index, 1);
-        destinationBoard.splice(destination.index, 0, taskObj);
+        const sourceBoard = { ...allBoards[source.droppableId] };
+        const destinationBoard = { ...allBoards[destination.droppableId] };
+        const taskObj = sourceBoard.todos[source.index];
+        sourceBoard.todos.splice(source.index, 1);
+        destinationBoard.todos.splice(destination.index, 0, taskObj);
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
@@ -94,14 +115,31 @@ function App() {
     }
   };
 
+  // Render the main application structure
+  // Sets up the drag and drop context, renders boards, and includes the trash can
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board key={boardId} boardId={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
+        <Droppable droppableId="boards" direction="horizontal" type="board">
+          {(provided) => (
+            <Boards ref={provided.innerRef} {...provided.droppableProps}>
+              {Object.keys(toDos).map((boardId, index) => (
+                <Draggable key={boardId} draggableId={boardId} index={index}>
+                  {(provided) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <Board boardId={boardId} toDos={toDos[boardId].todos} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Boards>
+          )}
+        </Droppable>
         <TrashCan />
       </Wrapper>
     </DragDropContext>
