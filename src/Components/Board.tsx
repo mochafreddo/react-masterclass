@@ -9,11 +9,6 @@ import DraggableCard from './DraggableCard';
 
 import type { JSX } from 'react';
 
-interface IAreaProps {
-  isDraggingFromThis: boolean;
-  isDraggingOver: boolean;
-}
-
 interface IBoardProps {
   toDos: ITodo[];
   boardId: string;
@@ -83,14 +78,14 @@ const Button = styled.button`
   }
 `;
 
-const Area = styled.div<IAreaProps>`
+const Area = styled.div<{ $isDraggingOver: boolean; $isDraggingFromThis: boolean }>`
   flex-grow: 1;
   padding: 15px;
   transition: background-color 0.3s ease-in-out;
   background-color: ${(props) =>
-    props.isDraggingOver
+    props.$isDraggingOver
       ? props.theme.dragOverColor
-      : props.isDraggingFromThis
+      : props.$isDraggingFromThis
         ? props.theme.dragFromColor
         : 'transparent'};
 `;
@@ -153,8 +148,8 @@ const Board = ({ toDos, boardId }: IBoardProps): JSX.Element => {
       <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
           <Area
-            isDraggingOver={snapshot.isDraggingOver}
-            isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+            $isDraggingOver={snapshot.isDraggingOver}
+            $isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
