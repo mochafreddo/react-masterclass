@@ -7,6 +7,7 @@ import Board from './Components/Board';
 import CreateBoardForm from './Components/CreateBoardForm';
 import TrashCan from './Components/TrashCan';
 
+import type { JSX } from 'react';
 import type { DropResult } from 'react-beautiful-dnd';
 
 /**
@@ -16,11 +17,27 @@ import type { DropResult } from 'react-beautiful-dnd';
  */
 const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: ${(props) => props.theme.bgColor};
+`;
+
+const Header = styled.header`
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 10px;
+`;
+
+const Description = styled.p`
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
 `;
 
 /**
@@ -30,34 +47,51 @@ const Wrapper = styled.div`
  */
 const Boards = styled.div`
   display: flex;
-  width: 100%;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 /**
- * Main application component for a drag-and-drop todo list.
+ * Main application component for a drag-and-drop Kanban board.
  *
- * This component uses react-beautiful-dnd for drag and drop functionality,
- * and Recoil for state management. It renders multiple boards, each containing
- * todo items that can be dragged between boards, reordered within boards,
- * or moved to a trash can for deletion.
+ * This component implements a Kanban-style task management system with the following features:
+ * - Multiple boards (e.g., 'To Do', 'Doing', 'Done') that can be reordered
+ * - Draggable todo items that can be moved between boards or reordered within a board
+ * - A trash can for deleting todo items
+ * - A form for creating new boards
  *
- * The component handles the logic for:
- * - Reordering boards
- * - Moving todo items between boards
- * - Reordering todo items within a board
- * - Deleting todo items by dragging them to the trash can
+ * Key functionalities:
+ * - Uses react-beautiful-dnd for drag and drop functionality
+ * - Employs Recoil for state management (toDoState atom)
+ * - Persists state in localStorage for data retention across sessions
  *
- * It also includes a form for creating new boards and a trash can component
- * for deleting items.
+ * The component handles the following operations:
+ * 1. Reordering boards
+ * 2. Moving todo items between boards
+ * 3. Reordering todo items within a board
+ * 4. Deleting todo items by dragging them to the trash can
+ * 5. Adding new boards
+ *
+ * State updates are managed in the onDragEnd function, which is called after each drag operation.
  *
  * @component
  * @example
- * <App />
+ * return (
+ *   <RecoilRoot>
+ *     <ThemeProvider theme={darkTheme}>
+ *       <App />
+ *     </ThemeProvider>
+ *   </RecoilRoot>
+ * )
+ * @returns {JSX.Element} The rendered Kanban board application
+ * @see {@link https://github.com/atlassian/react-beautiful-dnd|react-beautiful-dnd}
+ * @see {@link https://recoiljs.org/|Recoil}
+ * @see {@link https://styled-components.com/|styled-components}
  */
-function App() {
+const App = (): JSX.Element => {
   const [toDos, setToDos] = useRecoilState(toDoState);
 
   /**
@@ -129,6 +163,10 @@ function App() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
+        <Header>
+          <Title>Kanban Board</Title>
+          <Description>Drag and drop tasks between boards to organize your work</Description>
+        </Header>
         <CreateBoardForm />
         <Droppable droppableId="boards" direction="horizontal" type="board">
           {(provided) => (
@@ -154,6 +192,6 @@ function App() {
       </Wrapper>
     </DragDropContext>
   );
-}
+};
 
 export default App;
