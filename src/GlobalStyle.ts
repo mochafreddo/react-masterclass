@@ -43,16 +43,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-body {
-  font-weight: 300;
-  font-family: 'Source Sans Pro', sans-serif;
-  background-color:${(props) => props.theme.bgColor};
-  color:black;
-  line-height: 1.2;
-}
-a {
-  text-decoration:none;
-  color:inherit;
-}`;
+`;
 
 export default GlobalStyle;

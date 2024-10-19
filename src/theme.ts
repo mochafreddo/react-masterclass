@@ -1,13 +1,14 @@
 import type { DefaultTheme } from 'styled-components';
 
 export const darkTheme: DefaultTheme = {
-  bgColor: '#2c3e50',
-  boardColor: '#ecf0f1',
-  cardColor: 'white',
-  boardTitleBg: '#34495e',
-  boardTitleColor: 'white',
-  accentColor: '#3498db',
-  accentColorHover: '#2980b9',
-  dragOverColor: '#e0f2fe',
-  dragFromColor: '#e2e8f0',
+  colors: {
+    primary: '#007bff',
+    secondary: '#6c757d',
+    background: '#121212',
+    text: '#ffffff',
+  },
+  fonts: {
+    main: 'Arial, sans-serif',
+    heading: 'Georgia, serif',
+  },
 };
