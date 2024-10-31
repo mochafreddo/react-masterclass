@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, useViewportScroll } from 'framer-motion';
+import { motion, useMotionValue, useScroll, useTransform } from 'framer-motion';
 import styled from 'styled-components';
 
 const Wrapper = styled(motion.div)`
@@ -30,7 +30,7 @@ function App() {
       'linear-gradient(135deg, rgb(0, 238, 155), rgb(238, 178, 0))',
     ]
   );
-  const { scrollYProgress } = useViewportScroll();
+  const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 5]);
 
   return (
