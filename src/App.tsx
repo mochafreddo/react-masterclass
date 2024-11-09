@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Header from './Components/Header';
 import Home from './Routes/Home';
@@ -7,14 +7,14 @@ import Tv from './Routes/Tv';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter future={{ v7_startTransition: true }}>
       <Header />
       <Routes>
         <Route path="/tv" element={<Tv />} />
         <Route path="/search" element={<Search />} />
         <Route path="/" element={<Home />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
