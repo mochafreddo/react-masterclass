@@ -37,3 +37,9 @@ export default {
   [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and
   add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends`
   list
+
+## Environment Setup
+
+1. Copy `.env.example` to `.env.local`
+2. Replace `your_api_key_here` with your TMDB API key
+3. Never commit `.env.local` to version control

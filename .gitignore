@@ -5,18 +5,17 @@ node_modules
 
 # Testing
 coverage
+__tests__/__snapshots__
 
 # Production
 build
 dist
 dist-ssr
 
-# Misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Environment Variables
+.env
+.env.*
+!.env.example
 
 # Logs
 logs
@@ -30,6 +29,7 @@ lerna-debug.log*
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea
 *.suo
 *.ntvs*
@@ -39,16 +39,33 @@ lerna-debug.log*
 
 # TypeScript
 *.tsbuildinfo
+.tscache
 
 # Vite
 vite.config.ts.timestamp-*
 
-# Temporary files
-.tmp
-
-# Local files
-*.local
-
-# Cache
+# Cache and Temporary files
 .cache
+.tmp
 .eslintcache
+.stylelintcache
+.rollup.cache
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Package manager locks
+# Uncomment if you want to ignore lock files
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# Build artifacts
+stats.html
+.bundle
