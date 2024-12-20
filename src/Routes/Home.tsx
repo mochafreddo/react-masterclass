@@ -24,10 +24,12 @@ const Banner = styled.div<{ bgPhoto: string }>`
     url(${(props) => props.bgPhoto});
   background-size: cover;
 `;
+
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
 `;
+
 const Overview = styled.p`
   font-size: 36px;
   width: 50%;
@@ -37,6 +39,7 @@ const Slider = styled.div`
   position: relative;
   top: -100px;
 `;
+
 const Row = styled(motion.div)`
   display: grid;
   gap: 5px;
@@ -44,6 +47,7 @@ const Row = styled(motion.div)`
   position: absolute;
   width: 100%;
 `;
+
 const Box = styled(motion.div)<{ bgPhoto: string }>`
   background-color: white;
   background-image: url(${(props) => props.bgPhoto});
@@ -60,6 +64,7 @@ const Box = styled(motion.div)<{ bgPhoto: string }>`
     transform-origin: center right;
   }
 `;
+
 const Info = styled(motion.div)`
   padding: 10px;
   background-color: ${(props) => props.theme.black.lighter};
@@ -81,6 +86,7 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
 `;
+
 const BigMovie = styled(motion.div)`
   position: absolute;
   width: 40vw;
@@ -88,6 +94,31 @@ const BigMovie = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: ${(props) => props.theme.black.lighter};
+`;
+
+const BigCover = styled.img`
+  width: 100%;
+  background-size: cover;
+  background-position: center center;
+  height: 400px;
+`;
+
+const BigTitle = styled.h3`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  font-size: 46px;
+  position: relative;
+  top: -80px;
+`;
+
+const BigOverview = styled.p`
+  padding: 20px;
+  position: relative;
+  top: -80px;
+  color: ${(props) => props.theme.white.lighter};
 `;
 
 const Loader = styled.div`
@@ -143,6 +174,7 @@ function Home() {
   const toggleLeaving = () => setLeaving((prev) => !prev);
   const onBoxClicked = (movieId: number) => navigate(`/movies/${movieId}`);
   const onOverlayClick = () => navigate('/');
+
   const increaseIndex = () => {
     if (!data || leaving) return;
     toggleLeaving();
@@ -150,6 +182,10 @@ function Home() {
     const maxIndex = Math.floor(totalMovies / OFFSET) - 1;
     setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
   };
+
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find((movie) => movie.id === Number(bigMovieMatch.params.movieId));
 
   if (isLoading) {
     return (
@@ -202,7 +238,17 @@ function Home() {
           <>
             <Overlay onClick={onOverlayClick} exit={{ opacity: 0 }} animate={{ opacity: 1 }} />
             <BigMovie style={{ top: scrollY.get() + 100 }} layoutId={bigMovieMatch.params.movieId}>
-              hello
+              {clickedMovie && (
+                <>
+                  <BigCover
+                    style={{
+                      backgroundImage: `linear-gradient(to top, black, transparent), url(${makeImagePath(clickedMovie.backdrop_path, 'w500')})`,
+                    }}
+                  />
+                  <BigTitle>{clickedMovie.title}</BigTitle>
+                  <BigOverview>{clickedMovie.overview}</BigOverview>
+                </>
+              )}
             </BigMovie>
           </>
         ) : null}
