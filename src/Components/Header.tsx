@@ -1,9 +1,15 @@
 import { motion, useAnimation, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState } from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import type { Variants } from 'framer-motion';
+import type { SubmitHandler } from 'react-hook-form';
+
+interface FormValues {
+  keyword: string;
+}
 
 const logoVariants: Variants = {
   normal: {
@@ -43,18 +49,6 @@ const Col = styled.div`
   align-items: center;
 `;
 
-const Logo = styled(motion.svg)`
-  margin-right: 50px;
-  width: 95px;
-  height: 25px;
-  fill: ${(props) => props.theme.red};
-
-  path {
-    stroke-width: 6px;
-    stroke: white;
-  }
-`;
-
 const Items = styled.ul`
   display: flex;
   align-items: center;
@@ -74,6 +68,18 @@ const Item = styled.li`
   }
 `;
 
+const Logo = styled(motion.svg)`
+  margin-right: 50px;
+  width: 95px;
+  height: 25px;
+  fill: ${(props) => props.theme.red};
+
+  path {
+    stroke-width: 6px;
+    stroke: white;
+  }
+`;
+
 const Circle = styled(motion.span)`
   position: absolute;
   width: 5px;
@@ -86,7 +92,7 @@ const Circle = styled(motion.span)`
   background-color: ${(props) => props.theme.red};
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   display: flex;
   align-items: center;
@@ -115,6 +121,8 @@ function Header() {
   const { scrollY } = useScroll();
   const inputAnimation = useAnimation();
   const navAnimation = useAnimation();
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<FormValues>();
 
   const homeMatch = useMatch('/');
   const tvMatch = useMatch('/tv');
@@ -123,6 +131,8 @@ function Header() {
     void (searchOpen ? inputAnimation.start({ scaleX: 0 }) : inputAnimation.start({ scaleX: 1 }));
     setSearchOpen((prev) => !prev);
   };
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => navigate(`/search?keyword=${data.keyword}`);
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     void navAnimation.start(latest > 80 ? 'scroll' : 'top');
@@ -154,7 +164,7 @@ function Header() {
       </Col>
 
       <Col>
-        <Search>
+        <Search onSubmit={(e) => void handleSubmit(onSubmit)(e)}>
           <motion.svg
             onClick={toggleSearch}
             animate={{ x: searchOpen ? -185 : 0 }}
@@ -171,6 +181,7 @@ function Header() {
           </motion.svg>
 
           <Input
+            {...register('keyword', { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0 }}
             transition={{ type: 'linear' }}
